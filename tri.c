@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <sys/time.h>
+
 #include "tri.h"
 
 /*function definition*/
@@ -210,11 +212,31 @@ void triFusion(int *t, int l, int n)
 
 float getTemps(void (*p)(int*,int),int *t,int n ){
     
-    clock_t start;
+    struct timeval stop, start;
+    double secs = 0;
 
-    start = clock();
+    gettimeofday(&start, NULL);
 
     (*p)(t,n);
 
-    return clock() - start;
+    gettimeofday(&stop, NULL);
+
+    secs = (double)(stop.tv_usec - start.tv_usec) / 1000000 + (double)(stop.tv_sec - start.tv_sec);
+    
+    return secs;
+}
+
+
+// nbrElem & tailleMax are defined variables, steps we can give it 10 for example
+void evaluerTemps(int nbrElm , int tailleMax,int steps){
+    void (*p[])(int *,int)={triBulle,triSelection,triInsertion};
+    int steps,i;
+
+    // s = (int*)maloc(nbrElm*sizeof(int));
+
+    //fill steps array
+    for (i = nbrElm; i <= tailleMax; i = i + (tailleMax/steps)){
+        
+    }
+    
 }
