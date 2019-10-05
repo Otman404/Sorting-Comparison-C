@@ -21,8 +21,8 @@ int *remplir(int *t, int n)
 
 void triBulle(int *t, int n)
 {
-    int i, j, tmp;
-    printf("\n\n--- TRI A BULLE ---\n\n");
+    int i, j;
+    //printf("\n\n--- TRI A BULLE ---\n\n");
     for (i = 0; i < n; i++)
     {
         for (j = i + 1; j < n; j++)
@@ -36,11 +36,11 @@ void triBulle(int *t, int n)
             }
         }
     }
-    afficher(t, n);
+    //afficher(t, n);
 }
 void triSelection(int *t, int n)
 {
-    int *arr, i, j, pos, tmp;
+    int  i, j, pos;
 
     printf("\n\n--- TRI PAR SELECTION ---\n\n");
 
@@ -121,7 +121,8 @@ void afficher(int *t, int n)
     int i;
     for (i = 0; i < n; i++)
     {
-        printf("%3d", t[i]);
+        printf("%3d",t[i]);
+        // printf("t[%d] = %3d\n",i,t[i]);
     }
     printf("\n");
 }
@@ -206,3 +207,14 @@ void triFusion(int *t, int l, int n)
     } 
 } 
 
+
+float getTemps(void (*p)(int*,int),int *t,int n ){
+    
+    clock_t start;
+
+    start = clock();
+
+    (*p)(t,n);
+
+    return clock() - start;
+}

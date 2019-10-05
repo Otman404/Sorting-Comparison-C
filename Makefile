@@ -8,4 +8,4 @@ clean:
 	rm *.o $(TARGET)
 
 run:
-	$(CC) main.c tri.c tri.h -o $(TARGET) && ./$(TARGET)
+	$(CC) main.c tri.c tri.h -Wall -Wextra -g -o $(TARGET) && ./$(TARGET)
