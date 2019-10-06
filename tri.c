@@ -7,6 +7,12 @@
 
 #include "tri.h"
 
+#define MinElem 1000
+#define MaxElem 100000
+#define NbrMeth 5
+
+
+
 /*function definition*/
 void remplir(int *t, int n)
 {
@@ -45,7 +51,7 @@ void triSelection(int *t, int n)
 {
     int  i, j, pos;
 
-    printf("\n\n--- TRI PAR SELECTION ---\n\n");
+    // printf("\n\n--- TRI PAR SELECTION ---\n\n");
 
     for (i = 0; i < (n - 1); i++)
     {
@@ -64,10 +70,10 @@ void triSelection(int *t, int n)
             swap(&t[i], &t[pos]);
         }
     }
-    afficher(t, n);
+    // afficher(t, n);
 }
 
-void triRapide(int *t, int n, int d, int f)
+void triRapideHelper(int *t,int d, int f) // f = n-1
 {
     int i, j, pivot, tmp;
     if (d < f)
@@ -92,16 +98,18 @@ void triRapide(int *t, int n, int d, int f)
         tmp = t[pivot];
         t[pivot] = t[j];
         t[j] = tmp;
-        triRapide(t, n, d, j - 1);
-        triRapide(t, n, j + 1, f);
+        triRapideHelper(t,d, j - 1);
+        triRapideHelper(t,j + 1, f);
     }
 }
 
-
+void triRapide(int *t,int n){
+    triRapideHelper(t,0,n-1);
+}
 void triInsertion(int *t, int n)
 {
     int i, key, j;  
-    printf("\n\n--- TRI PAR INSERTION ---\n\n");
+    // printf("\n\n--- TRI PAR INSERTION ---\n\n");
 
     for (i = 1; i < n; i++) 
     {  
@@ -115,7 +123,7 @@ void triInsertion(int *t, int n)
         }  
         t[j + 1] = key;  
     }  
-    afficher(t,n);
+    // afficher(t,n);
 
 }
 
@@ -196,22 +204,25 @@ void fusionner(int *t, int l, int m, int n)
 } 
 
 
-void triFusion(int *t, int l, int n) 
+void triFusionHelper(int *t, int l, int n) 
 { 
 
     if (l < n) 
     { 
         int m = l+(n-l)/2; 
   
-        triFusion(t, l, m); 
-        triFusion(t, m+1, n); 
+        triFusionHelper(t, l, m); 
+        triFusionHelper(t, m+1, n); 
   
         fusionner(t, l, m, n); 
     } 
 } 
 
+void triFusion(int *t,int n){
+    triFusionHelper(t,0,n-1);
+}
 
-float getTemps(void (*p)(int*,int),int *t,int n ){
+double getTemps(void (*p)(int*,int),int *t,int n ){
     
     struct timeval stop, start;
     double secs = 0;
@@ -229,41 +240,42 @@ float getTemps(void (*p)(int*,int),int *t,int n ){
 
 
 // nbrElem & tailleMax are defined variables, steps we can give it 10 for example
-float ** evaluerTemps(int nbrElm , int tailleMax,int steps){
+void evaluerTemps(int steps){
 
     int *t,*tc,i,j,m;
-    float **temps;
+    double **temps;
+    temps = allocate2dArray(temps,steps,NbrMeth);
 
-    void (*p[])(int *,int)={triBulle,triSelection,triInsertion};
+    void (*p[])(int *,int)={triBulle,triSelection,triInsertion,triFusion,triRapide};
 
     // s = (int*)maloc(nbrElm*sizeof(int));
 
     //fill steps array
-    for (j=0,i = nbrElm; i <= tailleMax; i = i + (tailleMax/steps),j++){
+    for (j=0,i = MinElem; i <= MaxElem; i = i + (MaxElem/steps),j++){
         t = (int*)malloc(i*sizeof(int));
         tc = (int*)malloc(i*sizeof(int));
         remplir(t,i);
-        for ( m = 0; m < 3; m++){
+        for ( m = 0; m < NbrMeth; m++){
             memcpy(tc,t,i*sizeof(int));
-            temps = allocate2dArray(temps,i,m);
 			temps[j][m]=getTemps(p[m],tc,i);
         }
 
     }
-    
-    return temps;
+    // print2dArray(temps,(int) (sizeof (temps) / sizeof (temps)[0]),(int) (sizeof (temps) / sizeof (temps)[0]));
+    print2dArray(temps,steps,NbrMeth);
+    // return temps;
 }
 
 // Better to prepare times array then use it in evaluterTemps
 
-float **allocate2dArray(float **t,int l,int c){
+double **allocate2dArray(double **t,int l,int c){
     
     int i;
-    t = (float**)malloc(l*sizeof(float*));
+    t = (double**)malloc(l*sizeof(double*));
 
     for (i = 0; i < l; i++)
     {
-        t[i] = (float*)malloc(c*sizeof(float));
+        t[i] = (double*)malloc(c*sizeof(double));
     }
     
     return t;
@@ -271,11 +283,11 @@ float **allocate2dArray(float **t,int l,int c){
 }
 
 
-void print2dArray(int **t,int r,int c){
+void print2dArray(double **t,int r,int c){
     int i,j;
     for ( i = 0; i < r; i++){
         for ( j = 0; j < c; j++){
-            printf("%3d",t[i][j]);
+            printf("%6f",t[i][j]);
         }
         printf("\n");
     }

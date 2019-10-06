@@ -14,11 +14,14 @@
 
     // void triRapide(int *t,int n,int d,int f);
     void triRapide(int *t,int n);
+    void triRapideHelper(int *t,int d, int f); // f = n-1
     void triFusion(int*,int);
+    void triFusionHelper(int*,int,int);
     int* copy(int*,int);
     void swap(int*,int*);
-    float getTemps(void (*p)(int*,int),int *,int );
-    float **allocate2dArray(float **t,int l,int c);
-    float** evaluerTemps(int,int,int);
+    double getTemps(void (*p)(int*,int),int *,int );
+    double **allocate2dArray(double **t,int l,int c);
+    void print2dArray(double **t,int r,int c);
+    void evaluerTemps(int);
 
 #endif
