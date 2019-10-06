@@ -6,10 +6,10 @@
  
 int main()
 {
-    int *t,n = 50000000;
+    int *t,n = 1000;
     struct timeval stop, start;
     double secs = 0;
-    t = remplir(t,n);
+    //t = remplir(t,n);
     // afficher(t,n);
     //triFusion(t,0,n-1);
 

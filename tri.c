@@ -2,23 +2,24 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <string.h>
 #include <sys/time.h>
 
 #include "tri.h"
 
 /*function definition*/
-int *remplir(int *t, int n)
+void remplir(int *t, int n)
 {
     int i;
-    srand(time(NULL));
-    t = (int *)malloc(n * sizeof(int));
+    // srand(time(NULL));
+    // t = (int *)malloc(n * sizeof(int));
 
     for (i = 0; i < n; i++)
     {
         t[i] = rand() % (2 * n) - n;
     }
 
-    return t;
+    // return t;
 }
 
 void triBulle(int *t, int n)
@@ -228,15 +229,55 @@ float getTemps(void (*p)(int*,int),int *t,int n ){
 
 
 // nbrElem & tailleMax are defined variables, steps we can give it 10 for example
-void evaluerTemps(int nbrElm , int tailleMax,int steps){
+float ** evaluerTemps(int nbrElm , int tailleMax,int steps){
+
+    int *t,*tc,i,j,m;
+    float **temps;
+
     void (*p[])(int *,int)={triBulle,triSelection,triInsertion};
-    int steps,i;
 
     // s = (int*)maloc(nbrElm*sizeof(int));
 
     //fill steps array
-    for (i = nbrElm; i <= tailleMax; i = i + (tailleMax/steps)){
-        
+    for (j=0,i = nbrElm; i <= tailleMax; i = i + (tailleMax/steps),j++){
+        t = (int*)malloc(i*sizeof(int));
+        tc = (int*)malloc(i*sizeof(int));
+        remplir(t,i);
+        for ( m = 0; m < 3; m++){
+            memcpy(tc,t,i*sizeof(int));
+            temps = allocate2dArray(temps,i,m);
+			temps[j][m]=getTemps(p[m],tc,i);
+        }
+
+    }
+    
+    return temps;
+}
+
+// Better to prepare times array then use it in evaluterTemps
+
+float **allocate2dArray(float **t,int l,int c){
+    
+    int i;
+    t = (float**)malloc(l*sizeof(float*));
+
+    for (i = 0; i < l; i++)
+    {
+        t[i] = (float*)malloc(c*sizeof(float));
+    }
+    
+    return t;
+
+}
+
+
+void print2dArray(int **t,int r,int c){
+    int i,j;
+    for ( i = 0; i < r; i++){
+        for ( j = 0; j < c; j++){
+            printf("%3d",t[i][j]);
+        }
+        printf("\n");
     }
     
 }
