@@ -20,8 +20,9 @@
     int* copy(int*,int);
     void swap(int*,int*);
     double getTemps(void (*p)(int*,int),int *,int );
-    double **allocate2dArray(double **t,int l,int c);
+    double **allocate2dArray(int l,int c);
     void print2dArray(double **t,int r,int c);
+    void print2dArrayToFile(double **t,int r,int c);
     void evaluerTemps(int);
 
 #endif

@@ -7,10 +7,9 @@
 
 #include "tri.h"
 
-#define MinElem 1000
-#define MaxElem 100000
-#define NbrMeth 5
-
+#define MaxElem 1000000
+#define MinElem 0
+#define NbrMeth 4
 
 
 /*function definition*/
@@ -206,7 +205,6 @@ void fusionner(int *t, int l, int m, int n)
 
 void triFusionHelper(int *t, int l, int n) 
 { 
-
     if (l < n) 
     { 
         int m = l+(n-l)/2; 
@@ -241,17 +239,21 @@ double getTemps(void (*p)(int*,int),int *t,int n ){
 
 // nbrElem & tailleMax are defined variables, steps we can give it 10 for example
 void evaluerTemps(int steps){
-
+    printf("Evaluer");
+    int tempsLignes = (MaxElem/steps);
     int *t,*tc,i,j,m;
-    double **temps;
-    temps = allocate2dArray(temps,steps,NbrMeth);
-
-    void (*p[])(int *,int)={triBulle,triSelection,triInsertion,triFusion,triRapide};
+    double **temps = NULL;
+    printf("HERE before allocation\n");
+    temps = allocate2dArray(tempsLignes,NbrMeth);
+    printf("HERE\n");
+    // void (*p[])(int *,int)={triSelection};
+    void (*p[])(int *,int)={triSelection,triInsertion,triFusion,triRapide};
 
     // s = (int*)maloc(nbrElm*sizeof(int));
 
     //fill steps array
-    for (j=0,i = MinElem; i <= MaxElem; i = i + (MaxElem/steps),j++){
+    for (j=0,i = MinElem; i < MaxElem; i = i + steps,j++){
+        printf("Nbr of Elements: %d\n",i);
         t = (int*)malloc(i*sizeof(int));
         tc = (int*)malloc(i*sizeof(int));
         remplir(t,i);
@@ -259,17 +261,19 @@ void evaluerTemps(int steps){
             memcpy(tc,t,i*sizeof(int));
 			temps[j][m]=getTemps(p[m],tc,i);
         }
-
+        free(t);
+        free(tc);
     }
     // print2dArray(temps,(int) (sizeof (temps) / sizeof (temps)[0]),(int) (sizeof (temps) / sizeof (temps)[0]));
-    print2dArray(temps,steps,NbrMeth);
+    print2dArrayToFile(temps,tempsLignes,NbrMeth);
     // return temps;
 }
 
 // Better to prepare times array then use it in evaluterTemps
 
-double **allocate2dArray(double **t,int l,int c){
+double **allocate2dArray(int l,int c){
     
+    double **t;
     int i;
     t = (double**)malloc(l*sizeof(double*));
 
@@ -287,9 +291,23 @@ void print2dArray(double **t,int r,int c){
     int i,j;
     for ( i = 0; i < r; i++){
         for ( j = 0; j < c; j++){
-            printf("%6f",t[i][j]);
+            printf("%f\t",t[i][j]);
         }
         printf("\n");
     }
     
+}
+
+void print2dArrayToFile(double **t,int r,int c){
+
+FILE *fp;
+fp = fopen("matrix.txt","w");
+int i,j;
+    for ( i = 0; i < r; i++){
+        for ( j = 0; j < c; j++){
+            fprintf(fp,"%f\t",t[i][j]);
+        }
+        fprintf(fp,"\n");
+    }
+
 }
