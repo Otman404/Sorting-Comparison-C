@@ -17,7 +17,7 @@ int main()
 
     // printf("\n%f secs",getTemps(triRapide,t,n));
 
-     evaluerTemps(10000);
+     evaluerTemps(1);
 
     
 

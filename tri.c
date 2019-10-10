@@ -7,8 +7,8 @@
 
 #include "tri.h"
 
-#define MaxElem 1000000
-#define MinElem 0
+#define MaxElem 2011
+#define MinElem 2000
 #define NbrMeth 4
 
 
@@ -239,13 +239,11 @@ double getTemps(void (*p)(int*,int),int *t,int n ){
 
 // nbrElem & tailleMax are defined variables, steps we can give it 10 for example
 void evaluerTemps(int steps){
-    printf("Evaluer");
-    int tempsLignes = (MaxElem/steps);
+    int tempsLignes = (MaxElem-MinElem/steps);
     int *t,*tc,i,j,m;
     double **temps = NULL;
-    printf("HERE before allocation\n");
     temps = allocate2dArray(tempsLignes,NbrMeth);
-    printf("HERE\n");
+
     // void (*p[])(int *,int)={triSelection};
     void (*p[])(int *,int)={triSelection,triInsertion,triFusion,triRapide};
 
@@ -265,7 +263,7 @@ void evaluerTemps(int steps){
         free(tc);
     }
     // print2dArray(temps,(int) (sizeof (temps) / sizeof (temps)[0]),(int) (sizeof (temps) / sizeof (temps)[0]));
-    print2dArrayToFile(temps,tempsLignes,NbrMeth);
+    print2dArrayToFile(temps,tempsLignes,NbrMeth,steps);
     // return temps;
 }
 
@@ -298,12 +296,21 @@ void print2dArray(double **t,int r,int c){
     
 }
 
-void print2dArrayToFile(double **t,int r,int c){
+void print2dArrayToFile(double **t,int r,int c,int steps){
 
 FILE *fp;
-fp = fopen("matrix.txt","w");
-int i,j;
+int i,j,s;
+int *nbrElems;
+int k ;
+nbrElems = (int*)malloc(r*sizeof(int));
+
+for (k=0,s = MinElem; s <= MaxElem ; s+=steps,k++){
+    nbrElems[k] = s;
+}
+
+fp = fopen("matrix.dat","w");
     for ( i = 0; i < r; i++){
+        fprintf(fp,"%d\t",nbrElems[i]);
         for ( j = 0; j < c; j++){
             fprintf(fp,"%f\t",t[i][j]);
         }
