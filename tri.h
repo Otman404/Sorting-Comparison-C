@@ -17,8 +17,11 @@
     void triRapideHelper(int *t,int d, int f); // f = n-1
     void triFusion(int*,int);
     void triFusionHelper(int*,int,int);
+    void shellSort(int *, int ); 
     int* copy(int*,int);
     void swap(int*,int*);
+    int getMax(int *, int );
+    void plot();
     double getTemps(void (*p)(int*,int),int *,int );
     double **allocate2dArray(int l,int c);
     void print2dArray(double **t,int r,int c);

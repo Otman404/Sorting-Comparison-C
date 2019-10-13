@@ -7,9 +7,9 @@
 
 #include "tri.h"
 
-#define MaxElem 2011
-#define MinElem 2000
-#define NbrMeth 4
+#define MaxElem 150000
+#define MinElem 10000
+#define NbrMeth 5
 
 
 /*function definition*/
@@ -162,7 +162,10 @@ void fusionner(int *t, int l, int m, int n)
     int n1 = m - l + 1; 
     int n2 =  n - m; 
   
-    int L[n1], R[n2]; 
+    int *L,*R;
+    L = (int*)malloc(n1*sizeof(int));
+    R = (int*)malloc(n2*sizeof(int));
+
   
     for (i = 0; i < n1; i++) 
         L[i] = t[l + i]; 
@@ -220,6 +223,32 @@ void triFusion(int *t,int n){
     triFusionHelper(t,0,n-1);
 }
 
+
+void shellSort(int *t, int n) 
+{ 
+    int i, j, k, tmp;
+    for (i = n / 2; i > 0; i = i / 2)
+    {
+        for (j = i; j < n; j++)
+        {
+            for(k = j - i; k >= 0; k = k - i)
+            {
+                if (t[k+i] >= t[k])
+                    break;
+                else
+                {
+                    tmp = t[k];
+                    t[k] = t[k+i];
+                    t[k+i] = tmp;
+                }
+            }
+        }
+    }
+} 
+
+
+
+
 double getTemps(void (*p)(int*,int),int *t,int n ){
     
     struct timeval stop, start;
@@ -239,18 +268,18 @@ double getTemps(void (*p)(int*,int),int *t,int n ){
 
 // nbrElem & tailleMax are defined variables, steps we can give it 10 for example
 void evaluerTemps(int steps){
-    int tempsLignes = (MaxElem-MinElem/steps);
+    int tempsLignes = ((MaxElem-MinElem)/steps)+1;
     int *t,*tc,i,j,m;
     double **temps = NULL;
     temps = allocate2dArray(tempsLignes,NbrMeth);
 
     // void (*p[])(int *,int)={triSelection};
-    void (*p[])(int *,int)={triSelection,triInsertion,triFusion,triRapide};
+    void (*p[])(int *,int)={triSelection,triInsertion,triFusion,triRapide,shellSort};
 
     // s = (int*)maloc(nbrElm*sizeof(int));
 
     //fill steps array
-    for (j=0,i = MinElem; i < MaxElem; i = i + steps,j++){
+    for (j=0,i = MinElem; i <= MaxElem; i = i + steps,j++){
         printf("Nbr of Elements: %d\n",i);
         t = (int*)malloc(i*sizeof(int));
         tc = (int*)malloc(i*sizeof(int));
@@ -264,8 +293,9 @@ void evaluerTemps(int steps){
     }
     // print2dArray(temps,(int) (sizeof (temps) / sizeof (temps)[0]),(int) (sizeof (temps) / sizeof (temps)[0]));
     print2dArrayToFile(temps,tempsLignes,NbrMeth,steps);
+    // plot();
     // return temps;
-}
+}   
 
 // Better to prepare times array then use it in evaluterTemps
 
@@ -299,22 +329,34 @@ void print2dArray(double **t,int r,int c){
 void print2dArrayToFile(double **t,int r,int c,int steps){
 
 FILE *fp;
-int i,j,s;
-int *nbrElems;
-int k ;
-nbrElems = (int*)malloc(r*sizeof(int));
+int i,j;
+// nbrElems = (int*)malloc(r*sizeof(int));
 
-for (k=0,s = MinElem; s <= MaxElem ; s+=steps,k++){
-    nbrElems[k] = s;
-}
+// for (k=0,s = MinElem; s <= MaxElem ; s+=steps,k++){
+//     nbrElems[k] = s;
+// }
 
 fp = fopen("matrix.dat","w");
     for ( i = 0; i < r; i++){
-        fprintf(fp,"%d\t",nbrElems[i]);
+        fprintf(fp,"%d\t",i*steps+steps);
         for ( j = 0; j < c; j++){
             fprintf(fp,"%f\t",t[i][j]);
         }
         fprintf(fp,"\n");
     }
 
+}
+
+int getMax(int *t, int n)
+{
+  int max = t[0];
+  for (int i = 1; i < n; i++)
+    if (t[i] > max)
+      max = t[i];
+  return max;
+}
+
+
+void plot(){
+    system("gnuplot -persist gp.plt");
 }

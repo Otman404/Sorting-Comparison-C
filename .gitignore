@@ -56,4 +56,7 @@ dkms.conf
 
 
 # output file
-main    
+main
+
+# Assembly code
+*.s

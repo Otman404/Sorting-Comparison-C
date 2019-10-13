@@ -1,9 +1,17 @@
-#!/usr/bin/gnuplot -persist
+set datafile separator "\t"
+set title "Sorting Algorithms Comparison"
+set xlabel "Size of the array"
+set ylabel "Time in seconds"
 
-set title "Algorithms de Tri"
-set xlabel "Temps"
-set ylabel "Nombre d'elements"
-set grid
-plot "matrix22.dat" u (column(0)):2:xtic(1) w l title "","matrix22.dat" u (column(0)):3:xtic(1) w l title ""
+set key left
 
-plot "matrix22.dat"
+set tics font "Helvetica,10"
+
+
+
+
+plot "matrix.dat" using 2:xtic(1) title 'Tri Selection' with lines, \
+     "matrix.dat" using 3:xtic(1) title 'Tri Insertion' with lines, \
+     "matrix.dat" using 4:xtic(1) title 'Tri Fusion' with lines, \
+     "matrix.dat" using 5:xtic(1) title 'Tri Rapide' with lines, \
+     "matrix.dat" using 6:xtic(1) title 'Tri Shell' with lines,
