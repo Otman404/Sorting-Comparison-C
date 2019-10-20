@@ -9,18 +9,21 @@
     void remplir(int *,int);
     void afficher(int *,int);
     void triBulle(int*,int);
-    void triSelection(int*,int);
-    void triInsertion(int*,int);
+    void triSelection(int*,int); //O(n^2)
+    void triInsertion(int*,int); //O(n^2)
 
     // void triRapide(int *t,int n,int d,int f);
-    void triRapide(int *t,int n);
+    void triRapide(int *t,int n); //O(nlogn)
     void triRapideHelper(int *t,int d, int f); // f = n-1
-    void triFusion(int*,int);
+    void triFusion(int*,int); //O(nlogn)
     void triFusionHelper(int*,int,int);
-    void shellSort(int *, int ); 
+    void shellSort(int *, int );
+    void triRadix(int *t, int n);//O(kn)
+    void triDenombrement(int *t,int n);//O(k+n)
     int* copy(int*,int);
     void swap(int*,int*);
     int getMax(int *, int );
+    int getMin(int *t, int n);
     void plot();
     double getTemps(void (*p)(int*,int),int *,int );
     double **allocate2dArray(int l,int c);
