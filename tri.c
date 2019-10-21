@@ -7,8 +7,8 @@
 
 #include "tri.h"
 
-#define MaxElem 100000
-#define MinElem 1000
+#define MaxElem 1000000
+#define MinElem 500000
 #define NbrMeth 4
 
 /*function definition*/
@@ -306,11 +306,14 @@ void evaluerTemps(int steps)
         t = (int *)malloc(i * sizeof(int));
         tc = (int *)malloc(i * sizeof(int));
         remplir(t, i);
+        printf("%d\t",i);
         for (m = 0; m < NbrMeth; m++)
         {
             memcpy(tc, t, i * sizeof(int));
             temps[j][m] = getTemps(p[m], tc, i);
+            printf("%f\t",temps[j][m]);
         }
+        printf("\n");
         free(t);
         free(tc);
     }
