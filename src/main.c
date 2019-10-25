@@ -5,7 +5,7 @@ int main()
 {
 
 
-    // evaluerTemps(1000);
+    evaluerTemps(1000);
 
     plot();
 
