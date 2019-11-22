@@ -5,9 +5,9 @@ This is a C program that runs differents sorting algorithms having different Tim
 ## Built with
 
 - C langage
-- Gnuplot (to plot the results saved in matrix.dat)
+- Gnuplot (to plot the results saved in [matrix.dat](src/matrix.dat))
 
-## prequesities
+## Prerequisites
 
 Before compiling the program, make sure you have installed: 
 
